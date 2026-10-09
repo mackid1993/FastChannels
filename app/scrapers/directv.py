@@ -226,7 +226,7 @@ def _license_content_id_from_stream_url(stream_url: str, fallback: str) -> str:
     return fallback
 
 
-def _fetch_channel_playback(
+def _fetch_channel_auth(
     bearer_token: str, cookies: list[dict], client_context: str | None, ccid: str,
 ) -> dict | None:
     """GET /right/authorization/channel/v1 for one channel — the manifest +
@@ -2018,7 +2018,7 @@ class DirectvScraper(BaseScraper):
             )
 
         try:
-            result = _fetch_channel_playback(
+            result = _fetch_channel_auth(
                 bearer, self.config.get('cookies') or [], self.config.get('client_context'), ccid,
             )
         except DirectvAuthExpiredError as exc:
@@ -2132,7 +2132,7 @@ class DirectvScraper(BaseScraper):
             )
         if not play_token and channel_id and bearer:
             try:
-                fresh = _fetch_channel_playback(
+                fresh = _fetch_channel_auth(
                     bearer, config.get('cookies') or [], config.get('client_context'), channel_id,
                 )
             except DirectvAuthExpiredError as exc:
